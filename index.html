@@ -1,10 +1,12 @@
 <html>
 <head>
-  <title>My First Tome</title>
+<title>My First Tome</title>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script>
       var cardName='';
       var cardId=0;
+      var score=0;
+      var total=0
       function getCard(){    
         $.ajax({
 			url : 'http://api.mtgdb.info/cards/random',
@@ -38,10 +40,14 @@
         $('#lastGuess').html('Your guess was: '+form.guess.value);
         if (form.guess.value==cardName){
             $('#result').html('Correct!');
+            score++;
+            $('#score').html(score);
         }
         else {
             $('#result').html('Nope!');
         }
+        total++;
+        $('#total').html(total);
         guessform.guess.value=='';
         getCard();
     }
@@ -59,6 +65,7 @@ Flavor Text: <div id="flavortext"></div>
 <div id="name"></div>
 <div id="lastGuess"></div>
 <div id="image"></div>
+Score: <span id="score">0</span> out of <span id="total">0</span>
 </form>
 </body>
 </html>
