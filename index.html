@@ -1,0 +1,62 @@
+<html>
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script>
+      var cardName='';
+      var cardId=0;
+      function getCard(){    
+        $.ajax({
+			url : 'http://api.mtgdb.info/cards/random',
+			dataType : 'jsonp',
+			success : function(response) {
+                if (response.flavor!=''){    
+                    $('#flavortext').html('<em>'+response.flavor+'</em>');
+                    cardName=response.name;
+                    cardId=response.id;
+                }
+                else{
+                    getCard();
+                }
+            },
+			error : function(response) {
+				console.log(response);
+			}
+		});
+      }
+    getCard();
+    $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+        checkGuess(guess.form)
+      return false;
+    }
+    });
+    function checkGuess(form) {
+        $('#name').html('The last card was: '+cardName);
+        $('#image').html('<img src="http://api.mtgdb.info/content/card_images/'+cardId+'.jpeg">');
+        $('#lastGuess').html('Your guess was: '+form.guess.value);
+        if (form.guess.value==cardName){
+            $('#result').html('Correct!');
+        }
+        else {
+            $('#result').html('Nope!');
+        }
+        guessform.guess.value=='';
+        getCard();
+    }
+</script>
+</head>
+<body>
+Flavor Text: <div id="flavortext"></div>
+<br>
+<form id="guessform">
+	What's the card? <input type="text" id="guess">
+	<input type="button" value="Check" onClick="checkGuess(this.form)">
+<br>
+<div id="result"></div>
+<div id="name"></div>
+<div id="lastGuess"></div>
+<div id="image"></div>
+</form>
+</body>
+</html>
